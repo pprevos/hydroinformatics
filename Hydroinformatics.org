@@ -1,0 +1,1052 @@
+#+TITLE: Data Science for Water Utilities: An Introduction to Analysing Water with Examples in R
+:NOTES:    
+- [[https://github.com/hadley/stats337][GitHub - hadley/stats337: Readings in applied data science]]
+- [[https://cran.r-project.org/web/packages/driftR/vignettes/TidyEval.html][Tidy Evaluation in driftR]]
+- [[https://medium.com/indeed-data-science/qualitative-before-quantitative-how-qualitative-methods-support-better-data-science-d2b01d0c4e64][Qualitative + Quantitative – Indeed Data Science – Medium]]
+- [[https://en.wikipedia.org/wiki/Nilometer][Nilometer - Wikipedia]]
+:END:
+
+\frontmatter
+* Preface
+Writing code has been a part of my life for a long tiome. In 1983 I bought my first computer. My ZX81 home computer by Sinclair was like a magic box. I still remember my first lines of code:
+
+#+BEGIN_SRC
+10 PRINT "PETER PREVOS";
+20 GOTO 10
+#+END_SRC
+
+These lines of code were like a magical incantation that filled the screen with my name and from that moment was hooked to writing code. I later upgraded my digital life to an Atari XL/XE computer with a whopping 128 kilobyte of memory and worked on many little projects trying to develop the perfect computer game.
+
+Even though writing code was my passion at the time, I decided to study civil engineering because I wanted to build physical things instead of intangible software. This preference was largely influenced by the fact that my father was a builder. At University I had to write code in PASCAL and took a pleasure in writing code to solve engineering problems. I had my own suite of software to help me with my homework. At one stage, the university suggested I should switch to computer science, but my father's influence was stronger than my passion for writing code.
+
+I don't regret being a civil engineer as I so far had a great career that has taken me to Africa, Asia and Australia. I have worked on major infrastructure projects in these areas. 
+
+From the early start in my career, analysing data has always been my strong point. In my first job I worked for Dutch dredging multinational Boskalis. 
+
+I was first introduced to the Lotus 123 spreadsheet in 1993 and thought it was the best thing since sliced bread. I soon forgot about writing code in Pascal and BASIC and, like many colleagues of mine, became hooked on the spreadsheet.
+
+Throughout my career I must have built thousands of spreadsheets to solve many types of business problems. I even developed a complex system of interlinked spreadsheets to manage the flow of information at a major project in Bangladesh. We affectionately called this the spreadsheet jungle because of its dense structure. 
+
+Coliban Water software development.
+
+When I started my PhD I quickly realised that a spreadsheet would not meet my needs to undertake the complex analysis I needed to undertake. As I was already committed to using Open Source software for all my private computing needs, I decided to learn R to 
+
+I wrote my dissertation using literate programming so that all text and code were fully integrated and all tables visualisations automatically updated whenever new data became available. This books is also written in this way, using a combination of \LaTeX, Org Mode and R. 
+
+In my current role I am responsible for implementing the data science strategy of Coliban Water, a regional water utility in Australia.
+
+I hold a PhD in business and my approach to data science is very pragmatic and aimed at adding value to the organisation.
+
+This book introduces water professionals to using the R language to solve problems using data. My intention with writing this book is to wane water utility professionals of their reliance on spreadsheets and write code to solve data problems. This book will also be valuable for data scientists who are interested in improving their domain knowledge bout water management
+* Acknowledgements
+\mainmatter
+* Introduction
+Water and data have a lot in common and often use the same terminology. Both water and data are collected, they flow and are stored. There are also some differences. Although we are flooded with data, the amount of water available for human consumption is under pressure in a lot of places around the world.
+
+Data science comes natural to water utilities
+- Swimming in dashboards
+- Flooded with data
+- Data lakes
+- Shitloads of data
+** What is good data science?
+Data science is, according to Harvard Business Review the "sexiest job of the 21st century". Data scientists are like alchemists who extract gold from data. But we need to look beyond this mysticism and define some practical rules to guide data science strategy.
+
+In my first year of university, I studied architecture. Although I eventually became an engineer, one of the theories I remember is the Vitruvian triad. Vitruvius was an architect in ancient Rome who defined three requirements for a good building. A building needs to be sound and not collapse, it needs to be useful and it has to be aesthetic. These three conditions also apply to best practice in data science.
+*** Sound data science
+Just like a building should be sound and not collapse, a data product needs to be sound to be able to create business value. Soundness is where the ‘science’ comes into data science. The soundness relates to the reliability and validity of the analysis, which are well-established scientific principles.
+
+Another aspect of the soundness of a data product is its reproducibility, which is the distinguishing factor between traditional business analysis and data science. This requirement ensures that data products can be reviewed by the managers that base decisions on the output of the data product. Reproducibility ensures that all analysis can be peer-reviewed and it negates the problems of spreadsheets and black boxes.
+*** Useful data science
+The purpose of data science is to positively influence reality by collecting data, creating information and increasing our knowledge about reality.
+
+Dredging through the data to find something of value carrier the risk of finding fool's gold instead of valuable insights. A data product needs to provide actionable insights to either provide management comfort that objectives are met, or to provide them with information that points towards a way to improve the current situation. The usefulness requirement dictates that we always start with a problem and find a solution and not the other way around.
+*** Aesthetic data science
+The importance of aesthetics is not always apparent. I have seen many data visualisations that remind me of a Jackson Pollock painting, with lines and colour splashed over the screen. Visualisations that are not aesthetic are challenging to interpret and could lead to the wrong decision.
+
+The aesthetics of data visualisation is for a significant part in the eye of the beholder. However, when viewing aesthetics from a practical perspective, we can define what this means. The data-to-pixel ratio is a generic measure for the aesthetics of visualisations. This ratio describes the number of pixels that communicate data, over the total number of pixels on the screen. Referring back to the world of the painting, excellent data visualisation has the same qualities as the minimalist abstract composition by Piet Mondrian.
+*** Good Data Science
+This 2000-year-old wisdom is still valuable in the 21st century. Only when data science is sound, useful and aesthetic will it add value to your organisation.
+
+
+** Back to Basics: Creating Value With Data Science
+To visualise data science is, many writes refer to the Conway Venn Diagram or derivations thereof. Conway envisaged that data science occurs on the confluence of statistics, computing and substantive expertise. Conway argues that three skill domains are of equal importance and that data science without substantive experience leads to great computer models but not always to business value.
+
+This diagram and its many variations provide a succinct overview of the subject areas of data science, but it does not define what good data science is and what kind of problems a data scientist can solve.
+What is good data science?
+The words “Big Data” have become synonymous with promises of virtually unbounded benefits. Big Data algorithms are attributed mystical capabilities in predicting the future. From improving the experience of customers, to optimising treatment processes, Big Data promises to profoundly influence water utilities. There are successful examples of companies such as Facebook, Amazon and Google, where data science forms part of the fabric of the enterprise. But for most organisations, including water utilities, data science success has been limited to a few tests. 
+
+The envisaged benefits of Big Data have created a groundswell of interest in this topic within water utilities. This paper explains how water utilities can extract more value from existing data by using a strategic Data Science approach. This paper demonstrates how the benefits of Data Science can be realised by combining existing information technology infrastructure and competencies.
+** Data Science
+The term Data Science is more suitable to describe the process of creating value from data because the Big Data moniker is burdened with promise and hype. Data science is a systematic approach to analysing data. Although data analysis has always been the domain of engineers, new developments in information technology have turned this field into a specialised endeavour. Data Science is an emerging multidisciplinary field that exists on the confluence between knowledge of mathematics, coding skills and subject matter expertise. The difference between traditional analytical approaches and Data Science is mainly in how data products are developed an integrated in everyday business.
+
+The combination of skills required to undertake best practice data science are visualised in Conway’s data science Venn diagram (Figure 1). The combination of coding (hacking) skills and a good understanding of mathematics is a necessary condition to solve complex problems. Data Science moves beyond the traditional spreadsheets because the large volumes of data available for analysis far exceed the capacity of traditional tools. Data scientists use coding skills to develop databases and analytical software to manage the more complex tasks.
+
+These two skills need to be enhanced with contextual knowledge of the subject being analysed to be able to create value. Knowledge of water utility management ensures that the outcomes of data analysis add value through the business by creating actionable insights. Business analysis undertaken by teams without expertise in water management can lead to outcomes that are not actionable due to a lack of context. Having said this, a fresh look on existing data can also open new areas of insight but given the technological complexity of water and wastewater services, subject matter expertise is required to make sense of data.
+
+A data science team uses mathematical analysis to investigate a problem related to their area of expertise and uses computing skills to undertake and disseminate this analysis. The question arising from this introduction is how Data Science can add value to water utilities, beyond what is capable of achieving through standard methods?
+
+#+CAPTION: Conway’s data science Venn-diagram (Conway, 2013).
+#+ATTR_LATEX: :width 5cm
+[[file:Images/ConwayDiagram.png]]
+** Data Science for water utilities
+The challenge to implementing data science in water utilities, which some call hydroinformatics, is how to transition the organisation from being data-rich but information-poor to making decisions based on insight backed by data.
+
+Water utilities are ideal candidates to surf the digital revolution wave because they are traditionally data-rich organisations. Surveys conducted in 2015 with the Chief Information Officers from fifty large utilities in the United States indicate that only 10% of the available data is analysed to create value. The remaining 90% of the data, often referred to as ‘Dark Data’, provides a wealth of information that could be available if thoroughly analysed.  
+
+To better understand the existence of Dark Data we need to separate data created for ad hoc operational purposes from data for post hoc analysis. In essence, Dark Data is a matter of context. Most of the data stored in operational systems, such as SCADA or the CRM, is used to assist the operational process. As the interest for operational purposes wanes, this data becomes Dark Data. Most utilities own a large fleet of instrumentation that constantly measures a broad range of parameters through SCADA and other systems. This data is used to control core service delivery functions to manage the customer experience. There are many other opportunities to extract value from data after it has been used to manage operations. Data Scientists opportunistically use Dark Data for a purpose other than it was created for.
+
+The purpose of integrating data analytics into an organization is to create value from data by providing sound, useful and aesthetic information, such as a report, an application, a dashboard, a plant automation algorithm and so on. The soundness of the analysis requires the use of appropriate methods and the validation of results. The usefulness of data products is based on their ability to enhance the customer experience, reduce the environmental footprint of a water utility, improve the bottom line, or any other positive outcome. Value is determined by whether the information provides actionable insights. Data science also needs to be aesthetic and follow the principles of best practice in data visualisation and reporting. The ‘beautification’ of the data ensures that the message is easily understood by those that consume the information and are thus more likely to make correct decisions much more rapidly.
+** The Data Science Continuum
+The art and craft of data science can be expressed in a continuum that shows business value as a function of the complexity and maturity of the analytics (Figure 2). These levels are hierarchal, which implies that to achieve the highest level of business value and maturity, all levels need to be progressed through.
+
+#+CAPTION: Data Science Continuum (Mongeau, 2014).
+[[file:Images/Continuum.png]]
+*** Data Quality
+Data quality provides the underlying plumbing of the data science continuum. The majority of resources in any data science project are spent on cleaning and transforming data into a format that can be analysed. This work is not necessarily a reflection of bad data management practices. The main cause of this issue is that a most data is a by-product of operational processes. For example, a Customer Relationship Management system generates and stores data to facilitate the communication with customers, which is not necessarily in a format amenable to post-hoc analysis. 
+
+Data collected from SCADA Historians needs to be enhanced because the data is free of context. For example, filtered water turbidity data is generated 24 hours per day, but is only relevant when the filter is actually running. Two or more data sources need to be combined into one to provide meaningful information. At Coliban Water we have developed the Virtual Tag approach to extract and transform data form the SCADA Historian to make it suitable for Data Science projects (Prevos, 2016). The Virtual Tag engine currently contains data from bulk flow meters and critical components of the water treatment process and is used to detect non-revenue water and assess water treatment pant performance.
+*** Descriptive Statistics
+Most business reports consist of collections of descriptive statistics provided through tables of averages, maximums, minimums trends and other summaries. Descriptive statistics summarise existing data, but cannot generate new insights. Descriptive statistics can be enhanced through visualisation techniques. The visualisation of data is an emerging field, where insights of graphic design and psychology merge to improve the way we consume information. Dashboards, infographics and other visualisation techniques help managers to quickly consume information created from complex data.
+
+At Coliban Water we have developed a dashboard to visualise water system performance to the Board. This index uses four different sources of information: CCP alarms, laboratory data, the register of regulatory breaches and customer complaints. This information is amalgamated into an index and visualised geographically. This report has moved the Board away from interpreting water quality data presented in numerical tables to asking meaningful questions suboptimal performing systems. The traffic-light map is clickable and all data sources and transformations can be interrogated in detail to perform a root-cause analysis.
+
+Figure 3: Water service index (Prevos, 2015).
+*** Diagnostics
+At the third level, analytics techniques are used to diagnose existing data and create new information. These methods are common in water utility management through the use of, for example, hydraulic network modelling or contact centre capacity planning. Analytics goes beyond traditional business intelligence, as it is aimed at creating new insights that are not present in the original data.
+
+Coliban Water has developed an automated methodology to implement the quantitative aspects of the microbial Health-Based Targets (HBT) manual published by WSAA. This system uses the previously mentioned Virtual Tags approach to add context to SCADA data and applies the decision rules in the HBT manual to assess treatment plant performance (Prevos and Sheehan, 2015).
+*** Predictive
+Most of the future value from Big Data will come from the third level of the data science continuum, which is associated with predictive analysis or machine learning. These algorithms are designed to detect patterns in data, including unstructured data such as customer interactions. Predictive analytics can optimise asset replacement strategies, ensure sufficient staff are available in contact centres or optimise energy and chemical purchases. This is a rapidly emerging field that shows great promise for the water industry.
+*** Prescriptive and Semantic
+Prescriptive analysis uses the results from predictions to make decisions on behalf of people. This type of analysis regularly occurs in treatment plants, but the logic on which these controls are based is usually linear. This is the level of Intelligent Water Networks, where predictive analysis is used to optimise operations. 
+
+Semantic analysis moves into the quantitative area of qualitative data and is used to analyse large volumes of text, social networks and other social data. When analysing complaints we are interested in extracting the voice of the customer from the data, which goes beyond simple statistics on complaint numbers. Water utilities are generally quite poor regarding to knowledge about their customers, the people that live beyond the connection point. For commercial service providers knowledge about individual customers is a valuable resource that is used to target individual needs and preferences.
+** Creating value from data
+*** Soundness
+These philosophical considerations about data science need to be translated to business practice to create the promised value. The well-known Data-Information-Knowledge-Wisdom hierarchy categorises types of knowledge, but this triangle misses an important aspect. Underneath the data there is a reality that we seek to improve. Value is only created from data when the knowledge and wisdom is able to manage or improve reality. Value is only created through actionable insights.
+*** Utility
+*** Aesthetics
+** Capturing Data Science Value
+Water utilities are well-placed to embrace the new developments in Data Science because analysing data comes naturally to the engineers and scientists in our industry. Many of the competencies required to implement advanced analytics are already available to be utilised. One of the earliest examples of Data Science is in fact related to water supply. The famous cholera map drawn by John Snow in 1854 is one of the earliest examples of using data to improve public health.
+
+Implementing data science in water utilities does not necessarily require large investments in software and external expertise. The ‘R’ and Python programming languages are Open Source tools with impressive capabilities in this area, used by many large corporations. Most water utilities already have licenses for various Microsoft products, such as SQL Server Reporting Services, that can also be used to develop advanced Data Science products.
+Coliban Water is implementing a data science strategy based on the continuum in Figure 2, which has already delivered tangible results. We are currently developing an automated water balance for all our nineteen water systems and are paving the way to develop predictive models to help us optimise how networks are managed.
+
+Coliban Water shares any intellectual property in this area freely with other water utilities to advance data science in this industry. The Health-Based Targets (HBT) software is currently shared with several other utilities under an Open Source license arrangement. The most effective way to obtain the benefits of Data Science within this industry is to pool intellectual resources to create better experiences for our customers. 
+** This Book
+The next chapter introduces the R language for statistical computing
+
+The following four chapter follow the flow of water and data from catchment to tap and to the customer. These chapters provide many examples on how to solve common data science problems using the R language. 
+
+The last chapter discusses some more generic business problems.
+
+This book follows a different approach to other books on data science because it is written for the specific application to water utilities. This structure allows for a very practical book but it means that some of the 
+
+This book provides established data scientists with an overview of the types of analytical problems that water utilities solve regularly. All chapters introduce the reader to the basic principles of managing tap water before discussing the code.
+
+This book is primarily written for water utility professionals who want to improve the way they analyse data. 
+* The R Language
+Data scientists have many tools at their disposal and the R language is one of the most popular one. Many data scientists also use Python *** to achieve their objectives. 
+
+The difference between R and Python is one of taste. Generally, R seems to be the weapon of choice for researchers, academics and professionals, while Python is preferred by software developers. Both languages have access to virtually the same capabilities.
+
+| Phase                   | Excel | Python | R |
+|-------------------------+-------+--------+---|
+| Ad-Hoc (Reporting)      | X     |        | X |
+| Domain problem (models) | X     | X      | X |
+| Algorytm Development    |       | X      | X |
+| Data products           |       | X      | X |
+
+** Introduction to writing R code
+*** Basic Operations
+The basic operators available in R are:
+- Addition: =+=
+- Subtraction: =-=
+- Multiplication: =*=
+- Division: =/=
+- Exponentiation: =^=
+- Modulo: =%%=
+
+The =^= operator raises the number to its left to the power of the number to its right: for example =3^2 = 9=. The modulo returns the remainder of the division of the number to the left by the number on its right, for example 5 modulo 3 or =5 %% 3 = 2=. R applies the correct order of operations, which will perhaps help solving the popular internet memes.
+
+#+CAPTION: Internet meme (Source: =mycitymychoice.com=).
+#+ATTR_LATEX: :width 6cm
+[[file:Images/maths_question.jpg]]
+
+#+BEGIN_SRC R :exports both
+3 - 3 * 6 + 2
+#+END_SRC
+
+#+RESULTS:
+: -13
+
+*** Variables
+Variables are the foundations of mathematical computing. The assignment operator in the R language is the double-arrow character =<-=. The 
+
+The example below assigns the value of 32 to the variable =vol= and calls the function =flow= with the argument =vol= set to 10.
+
+#+BEGIN_SRC R :exports code
+vol <- 32
+flow(x = 10)
+#+END_SRC
+
+Variables can also hold text, for example =complaint_type <- "Taste"=. 
+
+Another common type of variables are booleans which can contain either =TRUE= or =FALSE=.
+
+#+BEGIN_SRC R
+numeric_vector <- c(1, 10, 49)
+character_vector <- c("a", "b", "c")
+
+# Complete the code for boolean_vector
+boolean_vector <- (TRUE, FALSE, TRUE)
+#+END_SRC
+
+
+
+
+*** Vectors
+
+- basic
+- naming
+- vector selection
+
+
+*** Data Tables
+
+
+
+*** Packages
+An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
+** The Tidyverse
+All the code in this book uses the collection of Tidyverse libraries developed by Hadley Wickham and many others. The Tidyverse simplifies data analysis and makes the code much more readable. All packages share an underlying design philosophy, grammar, and data structures. Wickham refers to his philosophy as 'opinionated', implying that there are many other ways to solve data science problems.
+
+[[https://www.reddit.com/r/rstats/comments/7sr2j6/what_does_it_mean_that_the_tidyverse_is/][What does it mean that the tidyverse is "opinionated"? : rstats]]
+ 
+*** Tidy Data
+
+
+The tidyverse has its own alternative for a data table, called a tibble. The word tibble is what table sounds like in a exaggerated new Zealand accent, which is Hadley Wickham's country of origin.
+
+* Catchment
+Air, water and food, the three essential elements of life, are in principle freely available in nature. In complex societies, both food and water are supplied in sufficient quality and quantity through economic exchange. While air is freely available, to obtain food we rely on a complex network of producers, distributors and retailers. Water does not have to be produced like food but follows a natural hydrologic cycle that starts in the oceans where it evaporates to form clouds and rain that subsequently nourishes rivers and groundwater. Water eventually evaporates or flows back into the ocean to start a new cycle (Figure 1.1 on the preceding page). Water for human consumption is extracted from the hydrologic cycle, consumed and returned to the environment either as wastewater, groundwater or through evaporation.
+
+#+CAPTION: The natural water cycle (Source: Merkushev, Dreamstime.com), used with permission.
+[[file:Images/watercycle.jpg]]
+
+** Inflows
+[[https://tonyladson.wordpress.com/2018/12/04/flow-duration-curves/][Flow duration curves]]
+
+
+** Area-Capacity Curves
+The defining parameter for each reservoir is the amount of water it can hold at capacity or at any time during its operation. Area-capacity curves define the relationship between the level of the water in a reservoir and the total volume.
+
+The relationship between the volume and water level in a reservoir is complex due to the irregular geography of reservoirs. The traditional method involves  
+
+--> methodology ,,_ 
+
+Even though the relationship between volume and water level is defined by a polynomial equation, most water utilities use a capacity table to determine the volume or surface area. using a table requires interpolation when the measured value of the water level does not appear in the 
+
+The code snippet below defines a capacity table (the =capacity= data frame shown in Table x) that defines the relationship between the level and volume of the reservoir. The =levels= data frame contains the water levels for which we want to interpolate the volume (0.4, 1.2, 2.7 and 32 metres).
+
+#+CAPTION: Simplified reservoir capacity table.
+| level | volume |
+|-------+--------|
+|     0 |      0 |
+|     1 |     20 |
+|     2 |     33 |
+|     3 |     35 |
+|     4 |     36 |
+
+The =approx= function returns a list of points which linearly interpolate the data points. This function is applied over the levels data frame. The defualt method for the =approx= function is linear interpolation. This function can also implement constant interpolation, which is discussed in section *.
+
+The =ggplot= function visualises the capacity table and then superimposes the interpolated data as points on the graph.
+
+#+BEGIN_SRC R :session tidyverse
+library(tidyverse)
+#+END_SRC
+
+
+#+BEGIN_SRC R :session tidyverse
+capacity <- data.frame(level = 0:4, volume = c(0, 20, 33, 35, 36))
+levels <- data.frame(level = c(0.4, 1.2, 2.7, 3.2))
+volumes <- lapply(levels, function(l) 
+    approx(capacity$level, capacity$volume, xout = l)) %>% 
+    data.frame()
+ggplot(capacity, aes(level, volume)) + geom_line() + 
+    geom_point(data = volumes, aes(level.x, level.y), colour = "red", size = 2)
+ggsave("Images/level_capacity.png", dpi = 300, width = 4, height = 3)
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Linear Interpolation of level-capacity curve.
+[[file:Images/level_capacity.png]]
+** Bathymetric Surveys
+*** The Pretty Boy reservoir
+The Easting and Northing are in the Universal Transverse Mercator projection. The depth of the reservoir is provided in feet (0.3048 metres). As usual in bathymetry surveys, the depth is a positive number measured from the datum.
+*** Downloading the data
+The raw data set is hosted on the Maryland geological Survey website as a CSV file. The file has a double header, the first row contains the field names and the second row the units. If the data does not already exist, it is downloaded from the website, skipping the first two rows. The next step adds the column names to the data frame. Otherwise, the data frame is read from the drive. The last step cleans the data. The CSV file contains several duplicates and a zero point at each of the four corners. The last two lines of code remove these anomalies.
+#+begin_src R
+library(tidyverse)
+if (!file.exists("Data/PrettyBoy.csv")) {
+  url <- "http://www.mgs.md.gov/ReservoirDataPoints/PrettyBoy1998.dat"
+  prettyboy <- read_csv(url, skip = 2, col_names = FALSE)
+  names(prettyboy) <- c("Easting", "Northing", "Depth")
+  write_csv(prettyboy, "Data/PrettyBoy.csv")
+} else prettyboy <- read_csv("Data/PrettyBoy.csv")
+ext <- c(which(prettyboy$Easting == min(prettyboy$Easting)), 
+         which(prettyboy$Easting == max(prettyboy$Easting)),
+         which(duplicated(prettyboy)))
+prettyboy <- prettyboy[-ext, ]
+#+end_src
+
+*** Mapping the Data
+The code defines a colour palette for this data using green and blue. The colours combine two palettes from the green and blue palette so that only zero values are green and positive values blue. The =ggplot= function converts the depth to metres. The =coord_equal()= function ensures that the map is not distorted. The =labs= statement changes the title of the legend.
+
+#+begin_src R
+library(tidyverse)
+library(RColorBrewer)
+PrettyBoy <- read_csv("Data/PrettyBoy.csv")
+bathymetry_colours <- c(rev(brewer.pal(3, "Greens"))[-2:-3], 
+                        brewer.pal(9, "Blues")[-1:-3])
+ggplot(PrettyBoy, aes(Easting, Northing, colour = Depth * 0.3048)) + 
+    geom_point(size = .1) + 
+    coord_equal() + labs(colour = "Depth [m]") + 
+    scale_colour_gradientn(colors = bathymetry_colours) 
+ggsave("Images/PrettyBoy_bathymetry.png", dpi = 300)
+#+end_src
+
+#+CAPTION: Linear Interpolation of level-capacity curve.
+[[file:Images/PrettyBoy_bathymetry.png]]
+
+The lines in the diagram show the route of the survey vessel that took the echo soundings.
+*** Volume Calculations
+[[https://cran.r-project.org/web/packages/tripack/tripack.pdf][Triangulated irregular network]]
+
+** Managing the Environment
+*** Soil Moisture
+The netCDF format is popular in sciences that analyse sequential spatial data. It is a self-describing, machine-independent data format for creating, accessing and sharing array-oriented information. The netCDF format provides spatial time-series such as meteorological or environmental data. This article shows how to visualise and analyse this data format by reviewing soil moisture data published by the Australian Bureau of Statistics.
+
+The Australian Bureau of Meteorology publishes hydrological data in both a simple map grid and in the NetCDF format. The map grid consists of a flat text file that requires a bit of data jujitsu before it can be used. The NetCDF format is much easier to deploy as it provides a three-dimensional matrix of spatial data over time.
+
+We are looking at the possible relationship between sewer main blockages and deep soil moisture levels. You will need to manually download this dataset from the Bureau of Meteorology website. I have not been able to scrape the website automatically. For this analysis, I use the actual deep soil moisture level, aggregated monthly in NetCDF 4 format.
+
+Soil moisture data from the Australian Bureau of meteorology in netCDF format
+
+Reading, Extracting and Transforming the netCDF format
+The ncdf4 library, developed by David W. Pierce, provides the necessary functionality to manage this data. The first step is to load the data, extract the relevant information and transform the data for visualisation and analysis. When the data is read, it essentially forms a complex list that contains the metadata and the measurements.
+
+The =ncvar_get= function extracts the data from the list. The lon, lat and dates variables are the dimensions of the moisture data. The time data is stored as the number of days since 1 January 1900. The spatial coordinates are stored in decimal degrees with 0.05-decimal degree intervals. The moisture data is a three-dimensional matrix with longitue, latitude and time as dimensions. Storing this data in this way will make it very easy to use.
+
+#+BEGIN_SRC R
+library(ncdf4)
+bom <- nc_open("Data/sd_pct_Actual_month.nc")
+print(bom)
+ 
+lon <- ncvar_get(bom, "longitude")
+lat <- ncvar_get(bom, "latitude")
+dates <- as.Date("1900-01-01") + ncvar_get(bom, "time")
+moisture <- ncvar_get(bom, "sd_pct")
+dimnames(moisture) <- list(lon, lat, dates)
+#+END_SRC
+
+The first step is to check the overall data. This first code snippet extracts a matrix from the cube for 31 July 2017 and plots it. This code pipe extracts the date for the end of July 2017 and creates a data frame which is passed to ggplot for visualisation. Although I use the Tidyverse, I still need reshape2 because the gather function does not like matrices.
+
+#+BEGIN_SRC R
+library(tidyverse)
+library(RColorBrewer)
+library(reshape2)
+ 
+d <- "2017-07-31"
+m <- moisture[, , which(dates == d)] %>%
+       melt(varnames = c("lon", "lat")) %>%
+       subset(!is.na(value))
+ 
+ggplot(m, aes(x = lon, y = lat, fill = value)) + borders("world") + 
+    geom_tile() + 
+    scale_fill_gradientn(colors = brewer.pal(9, "Blues")) + 
+    labs(title = "Total moisture in deep soil layer (100-500 cm)",
+    subtitle = format(as.Date(d), "%d %B %Y")) + 
+    xlim(range(lon)) + ylim(range(lat)) + coord_fixed()
+ggsave("Images/soilmoisture.png", dpi = 300)
+#+END_SRC
+
+#+CAPTION: Deep soil moisture: Source Bureau of Meteorology, Australia
+
+With the =ggmap= package we can create a nice map of a local area.
+
+#+BEGIN_SRC R
+library(ggmap)
+loc <- round(geocode("Bendigo") / 0.05) * 0.05 
+map_tile <- get_map(loc, zoom = 12, color = "bw") %>% 
+    ggmap()
+ 
+map_tile + 
+    geom_tile(data = m, aes(x = lon, y = lat, fill = value), alpha = 0.8) + 
+    scale_fill_gradientn(colors = brewer.pal(9, "Blues")) + 
+    labs(title = "Total moisture in deep soil layer (100-500 cm)",
+        subtitle = format(as.Date(d), "%d %B %Y"))
+#+END_SRC
+
+For my analysis, I am interested in the time series of moisture data for a specific point on the map. The previous code slices the data horizontally over time. To create a time series we can pierce through the data for a specific coordinate. The purpose of this time series is to investigate the relationship between sewer main blockages and deep soil data, which can be a topic for a future post.
+
+#+BEGIN_SRC R
+mt <- data.frame(date = dates, 
+                 dp = moisture[as.character(loc$lon), as.character(loc$lat), ])
+ggplot(mt, aes(x = date, y = dp)) + geom_line() + 
+    labs(x = "Month",
+         y = "Moisture",
+         title = "Total moisture in deep soil layer (100-500 cm)",
+         subtitle = paste(as.character(loc), collapse = ", "))
+#+END_SRC
+
+#+CAPTION: Deep soil moisture time series.
+* Treatment
+** SCADA
+Analysing SCADA output is challenging due to the relatively large volumes of data and issues with data quality. 
+
+
+
+*** Spike detection
+SCADA spikes are events in the data stream of water treatment plants or similar installations. These SCADA spikes can indicate problems with the process and could result in an increased risk to public health.
+
+The WSAA Health Based Targets Manual specifies a series of decision rules to assess the performance of filtration processes. For example, this rule assesses the performance of conventional filtration:
+
+“Individual filter turbidity ≤ 0.2 NTU for 95% of month and not > 0.5 NTU for ≥ 15 consecutive minutes.”
+
+Turbidity is a measure for the cloudiness of a fluid because of large numbers of individual particles otherwise invisible to the naked eye. Turbidity is an important parameter in water treatment because a high level of cloudiness strongly correlates with the presence of microbes. This article shows how to implement this specific decision rule using the R language.
+
+To create a minimum working example, I first create a simulated SCADA feed for turbidity. The turbidity data frame contains 24 hours of data. The seq.POSIXt function creates 24 hours of timestamps at a one-minute spacing. In addition, the rnorm function creates 1440 turbidity readings with an average of 0.1 NTU and a standard deviation of 0.01 NTU. The image below visualises the simulated data. The next step is to assess this data in accordance with the decision rule.
+
+#+BEGIN_SRC R
+set.seed(1234)
+turbidity <- data.frame(DateTime = seq.POSIXt(as.POSIXct("2017-01-01 00:00:00"), by = "min", length.out=24*60), Turbidity = rnorm(n = 24*60, mean = 0.1, sd = 0.01))
+#+END_SRC
+
+The second section simulates five spikes in the data. The first line picks a random start time for the spike. The second line in the for-loop picks a duration between 10 and 30 minutes. In addition, the third line simulates the value of the spike. The mean value of the spike is determined by the =rbinom= function to create either a low or a high spike. The remainder of the spike simulation inserts the new data into the turbidity data frame.
+
+#+BEGIN_SRC R
+# Simulate spikes
+for (i in 1:5) {
+   time <- sample(turbidity$DateTime, 1)
+   duration <- sample(10:30, 1)
+   value <- rnorm(1, 0.5 * rbinom(1, 1, 0.5) + 0.3, 0.05)
+   start <- which(turbidity$DateTime == time)
+   turbidity$Turbidity[start:(start+duration - 1)] <- rnorm(duration, value, value/10)
+}
+#+END_SRC
+
+The image below visualises the simulated data using the mighty ggplot. Only four spikes are visible because two of them overlap. The next step is to assess this data in accordance with the decision rule.
+
+#+BEGIN_SRC R
+library(ggplot2)
+ggplot(turbidity, aes(x = DateTime, y = Turbidity)) + 
+   geom_line(size = 0.2) + 
+   geom_hline(yintercept = 0.5, col = "red") + ylim(0,max(turbidity$Turbidity)) + 
+   ggtitle("Simulated SCADA data")
+#+END_SRC
+
+#+CAPTION: Simulated SCADA data with spikes
+
+The following code searches for all spikes over 0.50 NTU using the run length function. This function transforms a vector into a vector of values and lengths. For example, the run length of the vector =c(1, 1, 2, 2, 2, 3, 3, 3, 3, 5, 5, 6)= is:
+
+=lengths: int [1:5] 2 3 4 2 1=
+
+=values : num [1:5] 1 2 3 5 6=
+
+The value 1 has a length of 1, the value 2 has a length of 3 and so on. The spike detection code creates the run length for turbidity levels greater than 0.5, which results in a boolean vector. The cumsum function calculates the starting point of each spike which allows us to calculate their duration.
+
+The code results in a data frame with all spikes higher than 0.50 NTU and longer than 15 minutes. The spike that occurred at 11:29 was higher than 0.50 NTU and lasted for 24 minutes. The other three spikes are either lower than 0.50 NTU. The first high spike lasted less than 15 minutes.
+
+#+BEGIN_SRC R
+spike.detect <- function(DateTime, Value, Height, Duration) {
+ runlength <- rle(Value > Height)
+ spikes <- data.frame(Spike = runlength$values,
+ times <- cumsum(runlength$lengths))
+ spikes$Times <- DateTime[spikes$times]
+ spikes$Event <- c(0,spikes$Times[-1] - spikes$Times[-nrow(spikes)])
+ spikes <- subset(spikes, Spike == TRUE & Event > Duration)
+ return(spikes)
+}
+spike.detect(turbidity$DateTime, turbidity$Turbidity, 0.5, 15)
+#+END_SRC
+
+This approach was used to prototype a software package to assess water treatment plant data in accordance with the Health-Based Targets Manual. The finished product has been written in SQL and is available under an Open Source sharing license.
+** Health-Based Targets
+Safe drinking water is a necessary condition to allow communities to live, grow and enjoy. While in many parts of the world water supplies are the direct or indirect cause of about ten percent of the burden of disease (Hrudey and Hrudey, 2004), Australian communities enjoy water that poses almost no risk to human health. The question remains, however, exactly how low the level of risk actually is. To define microbial safety the World Health Organisation uses the metric of Disability Adjusted Life Years (DALY), which represents the period a person is burdened with an illness (i.e. loss of time in good health) and years lost through premature death.
+
+#+CAPTION: Disability-Affected Life Year infographic (Source: Wikimedia Commons).
+[[file:Images/DALY_disability_affected_life_year_infographic.svg]]
+
+The microbial Health-Based Targets (HBT) approach analyses water treatment plant performance to assure that the level of public health risk is less than 1 micro DALY per person per year.
+
+The Manual for the Application of Health Based Treatment Targets, published by the Water Services Association of Australia (2015) provides guidance to estimate the potential burden of disease caused by reticulated drinking water. The HBT Manual defines methods for determining the minimum treatment requirements for drinking water supplies by assessing the relative microbiological risk in the source water for the supply, and provides a suite of decision rules to estimate the effectiveness of treatment barriers. 
+
+The effectiveness of the treatment barriers is expressed in Log Reduction Values. A Log Reduction Value (LRV) is the logarithm of the proposition of pathogens removed from the water. The HBT Manual defines the Water Safety Continuum which relates LRV to public health risk in micro DALY.
+
+Using the HBT Manual to assess pathogen barrier performance on a regular basis requires a large amount of resources for medium-sized water utilities that typically manage a large number of drinking water supply systems. Undertaking these assessments regularly is valuable because it adds value to otherwise amorphous SCADA data locked away in databases. To fully realise the benefits of the HBT approach, Coliban Water has developed software to automate the decision rules in the HBT Manual and produce a monthly report of pathogen barrier performance.
+
+It should be noted that the reports produced by this software can be used for post-hoc analysis and governance, they are not a replacement for operational monitoring.
+
+*** Pathogen Barrier rules
+
+This book discusses two of the pathogen barrier rules from the HBT manual to show how these can be implemented in R.
+
+* Distribution
+** Water Balance
+** Digital Customer Meters
+Many water utilities around the world are implementing smart metering projects. This 
+
+Hourly data obtained from customer meters is privacy sensitive and in this section no actual data will be used to ensure we do not introduce any provacy concerns.
+*** Simulating Digital Metering Data
+The R language has excellent facilities to simulate data.
+
+The R language comes to the rescue as it has magnificent capabilities to simulate data. Simulating data is a useful technique to progress a project when data is being collected. Simulated data also helps because the outcomes of the analysis are known, which helps to validate the outcomes.
+
+The raw data that we will eventually receive from the digital customer meters has the following basic structure:
+
+- =DevEUI=: Unique device identifier.
+- =Timestamp=: Date and time in (UTC) of the transmission.
+- =Count=: Cumulative count: The number of revolutions the water meter makes. Each revolution is a pulse which equates to five litres of water.
+
+Every device will send an hourly data burst which contains the cumulative meter read in pulse counts. The transmitters are set at a random offset from the whole our, to minimise the risk of congestion at the receivers. The time stamp for each read is set in the Coordinated Universal Time (UTC). Using this time zone prevents issues with daylight savings. All analysis will be undertaken in the Australian Eastern (Daylight) Time zone.
+
+This article explains how we simulated test data to assist with developing reporting and analysis. The analysis of digital metering data follows in a future post. The code and the data can be found on GitHub. I have recently converted to using the Tidyverse for all my R coding. It has made my working life much easier and I will use it for all future posts.
+
+For simplicity, this simulation assumes a standard domestic diurnal curve (average daily usage pattern) for indoor water use. Diurnal curves are an important piece of information in water management. The curve shows water consumption over the course of a day, averaged over a fixed period. The example below is sourced from a journal article. This generic diurnal curve consists of 24 data points based on measured indoor water consumption, shown in the graph below.
+
+#+CAPTION: Simulating water consumption: diurnal curve example. Source: Gurung et al. (2014) Smart meters for enhanced water supply network modelling and infrastructure planning. Resources, Conservation and Recycling (90), 34-50.
+
+This diurnal curve only includes indoor water consumption and is assumed to be independent of seasonal variation. This is not a realistic assumption, but the purpose of this simulation is not to accurately model water consumption but to provide a data set to validate the reporting and analyses.
+
+The first code snippet sets the parameters used in this simulation. The unique device identifiers (DevEUI) are simulated as six-digit random numbers. The timestamps vector consists of hourly date-time variables in UTC. For each individual transmitter, this timestamp is offset by a random time. Each transmitter is also associated with the number of people living in each house. This number is based on a Poisson distribution.
+
+#+BEGIN_SRC R
+library(tidyverse)
+# Boundary conditions
+n <- 100 # Number of simulated meters
+d <- 100 # Number of days to simulate
+s <- as.POSIXct("2020-01-01", tz = "UTC") # Start of simulation
+ 
+set.seed(1969) # Seed random number generator for reproducibility
+rtu <- sample(1E6:2E6, n, replace = FALSE) # 6-digit id
+offset <- sample(0:3599, n, replace = TRUE) # Unique Random offset for each RTU
+ 
+# Number of occupants per connection
+occupants <- rpois(n, 1.5) + 1 
+as.data.frame(occupants) %>%
+  ggplot(aes(occupants)) + geom_bar(fill = "dodgerblue2", alpha = 0.5) + 
+  xlab("Occupants") + ylab("Connections") + ggtitle("Occupants per connection")
+#+END_SRC 
+
+#+CAPTION: Simulated number of occupants per connection.
+
+The diurnal curve is based on actual data which includes leaks as the night time use shows a consistent flow of about one litre per hour. For that reason, the figures are rounded and reduced by one litre per hour, to show a zero flow when people are usually asleep. The curve is also shifted by eleven hours because the raw data is stored in UTC.
+
+#+BEGIN_SRC R
+diurnal <- round(c(1.36, 1.085, 0.98, 1.05, 1.58, 3.87, 9.37, 13.3, 12.1, 10.3, 8.44, 7.04, 6.11, 5.68, 5.58, 6.67, 8.32, 10.0, 9.37, 7.73, 6.59, 5.18, 3.55, 2.11)) - 1 
+ 
+data.frame(TimeUTC = 0:23, Flow = diurnal) %>% 
+  ggplot(aes(x = TimeUTC, y = Flow)) + 
+  geom_area(fill = "dodgerblue2", alpha = 0.5) +
+  scale_x_continuous(breaks = 0:23) + ylab("Flow [L/h/p]") + 
+  ggtitle("Idealised diurnal curve for households")
+ggsave("Images/DigitalMetering/diurnal_curve.png", dpi = 300)
+ 
+tdiff <- 11
+diurnal <- c(diurnal[(tdiff + 1): 24], diurnal[1:tdiff])
+#+END_SRC
+
+This simulation only aims to simulate a realistic data set and not to present an accurate depiction of reality. This simulation could be enhanced by using different diurnal curves for various customer segments and to include outdoor watering, temperature dependencies and so on.
+
+A leak is defined by a constant flow through the meter, in addition to the idealised diurnal curve. A weighted binomial distribution (θ = 0.1) models approximately one in ten properties with a leak. The size of the leak is derived from a random number between 10 and 50 litres per hour.
+
+The data is stored in a matrix through a loop that cycles through each connection. The DevEUI is repeated over the simulated time period (24 times the number of days). The second variable is the time stamp plus the predetermined offset for each RTU. The meter count is defined by the cumulative sum of the diurnal flow, multiplied by the number of occupants. Each point in the diurnal deviates from the model curve by ±10%. Any predetermined leakage is added to each meter read over the whole period of 100 days. The hourly volumes are summed cumulatively to simulate meter reads. The flow is divided by five as each meter revolution indicate five litres.
+
+The next code snippet simulates the digital metering data using the assumptions and parameters outlined above.
+
+#+BEGIN_SRC R
+# Leak simulation
+leaks <- rbinom(n, 1, prob = .1) * sample(10:50, n, replace = TRUE) data.frame(DevEUI = rtu, Leak = leaks) %>%
+  subset(Leak > 0)
+ 
+# Digital metering data simulation
+meter_reads <- matrix(ncol = 3, nrow = 24 * n * d)
+colnames(meter_reads) <- c("DevEUI", "TimeStampUTC", "Count")
+ 
+for (i in 1:n) {
+  r <- ((i - 1) * 24 * d + 1):(i * 24 * d)
+  meter_reads[r, 1] <- rep(rtu[i], each = (24 * d))
+  meter_reads[r, 2] <- seq.POSIXt(s, by = "hour", length.out = 24 * d) + offset[i]
+  meter_reads[r, 3] <- round(cumsum((rep(diurnal * occupants[i], d) + leaks[i]) * runif(24 * d, 0.9, 1.1))/5)
+} 
+ 
+meter_reads <- meter_reads %>% 
+  as_data_frame() %>%
+  mutate(TimeStampUTC = as.POSIXct(TimeStampUTC, origin = "1970-01-01", tz ="UTC"))
+#+END_SRC
+
+The data transmission process is not 100% reliable and the base station will not receive some reads. This simulation identifies reads to be removed from the data through the temporary variable remove. This simulation includes two types of failures:
+
+- Faulty RTUs (2% of RTUs with missing 95% of data)
+- Randomly missing data points (1% of data)
+
+#+BEGIN_SRC R
+# Initialise temp variable
+meter_reads <- mutate(meter_reads, remove = 0)
+# Define faulty RTUs (2% of fleet)
+faulty <- rtu[rbinom(n, 1, prob = 0.02) == 1]
+meter_reads$remove[meter_reads$DevEUI %in% faulty] <- rbinom(sum(meter_reads$DevEUI %in% faulty), 1, prob = .95)
+ 
+# Data loss
+missing <- sample(1:(nrow(meter_reads) - 5), 0.005 * nrow(meter_reads))
+for (m in missing){
+  meter_reads[m:(m + sample(1:5, 1)), "remove"] <- 1
+}
+ 
+# Remove data points
+meter_reads <- filter(meter_reads, remove == 0) %>%
+  select(-remove)
+ 
+#Visualise
+filter(meter_reads, DevEUI %in% rtu[2]) %>%
+  mutate(TimeStampAEST = as.POSIXct(format(TimeStampUTC, 
+                                           tz = "Australia/Melbourne"))) %>%
+  filter(TimeStampAEST >= as.POSIXct("2020-02-06") & 
+         TimeStampAEST <= as.POSIXct("2020-02-08")) %>%
+  arrange(DevEUI, TimeStampAEST) %>% 
+  ggplot(aes(x = TimeStampAEST, y = Count, colour = factor(DevEUI)))  + 
+    geom_line() + geom_point() 
+#+END_SRC
+
+The graph shows an example of the cumulative reads and some missing data points.
+
+*** Analysing Digital Metering Data
+All analysis is undertaken in the local Australian Eastern Standard Time (AEST). The input to all functions is thus in AEST. The digital water meters send an hourly pulse at a random time within the hour. Each transmitter (RTU) uses a random offset to avoid network congestion. The digital meter counts each time the impeller makes a full turn, and for this analysis, we assume that this equates to a five-litre volume. The ratio between volume and count depends on the meter brand and type. The image below shows a typical data set for an RTU, including some missing data points.
+
+#+CAPTION: Simulated water consumption (red: measured points, blue: interpolated points).
+
+To analyse the data we need two auxiliary functions: one to slice the data we need and one to interpolate data for the times we need it. The Tidyverse heavily influences the code in this article. I like the Tidyverse way of doing things because it leads to elegant code that is easy to understand.
+
+#+BEGIN_SRC R
+library(tidyverse)
+library(lubridate)
+library(magrittr)
+meter_reads <- read.csv("Hydroinformatics/DigitalMetering/meter_reads.csv")
+rtu <- unique(meter_reads$DevEUI)
+meter_reads$TimeStampUTC <- as.POSIXct(meter_reads$TimeStampUTC, tz = "UTC")
+#+END_SRC
+
+Data analysis is undertaken on slices of the complete data set. This function slices the available data by a vector of RTU ids and a timestamp range in AEST. This function adds a new timestamp variable in AEST. If no date range is provided, all available data for the selected RTUs is provided. The output of this function is a data frame (a Tibble in Tydiverse language).
+
+#+BEGIN_SRC R
+slice_reads <- function(rtus, dates = range(meter_reads$TimeStampUTC)) {
+ filter(meter_reads, DevEUI %in% rtus) %>%
+    mutate(TimeStampAEST = as.POSIXct(format(TimeStampUTC, tz = "Australia/Melbourne"))) %>%
+    filter(TimeStampAEST >= as.POSIXct(dates[1]) & 
+             TimeStampAEST <= as.POSIXct(dates[2])) %>%
+    arrange(DevEUI, TimeStampAEST)
+}
+#+END_SRC
+
+This function interpolates the cumulative counts for a series of RTUs over a vector of timestamps in AEST. The function creates a list to store the results for each RTU, interpolates the data using the approx function and then flattens the list back to a data frame. The interpolation function contains a different type of pipe because of the approx for interpolation function does not take a data argument. The =%$%= pipe from the Magrittr package solves that problem.
+
+The output is a data frame with DevEUI, the timestamp in AEST and the interpolated cumulative count. The image above shows the counts for two meters over two days an the graph superimposes an interpolated point over the raw data. Although the actual data consists of integer counts, interpolated values are numeric values. The decimals are retained to distinguish them from real reads.
+
+#+BEGIN_SRC R
+interpolate_count <- function(rtus, timestamps) {
+  timestamps <- as.POSIXct(timestamps, tz = "Australia/Melbourne")
+  results <- vector("list", length(rtus))
+  for (r in seq_along(rtus)) {
+    interp <- slice_reads(rtus[r]) %$%
+      approx(TimeStampAEST, Count, timestamps)
+    results[[r]] <- data_frame(DevEUI = rep(rtus[r], length(timestamps)), TimeStampAEST = timestamps, Count = interp$y) 
+  } 
+  return(do.call(rbind, results)) 
+} 
+ 
+interpolate_count(rtu[2:3], seq.POSIXt(as.POSIXct("2020-02-01"), as.POSIXct("2020-02-2"), by = "day")) 
+ 
+slice_reads(rtu[2], c("2020-02-06", "2020-02-08")) %>%
+  ggplot(aes(x = TimeStampAEST, y = Count))  + 
+  geom_line(col = "grey", size = 1) + 
+    geom_point(col = "red") + 
+    geom_point(data = interpolate_count(rtu[2], as.POSIXct("2020-02-06") + (0:2)*24*3600), colour = "blue") + 
+    ggtitle(paste("DevEUI", rtu[2]))
+#+END_SRC
+
+With these two auxiliary functions, we can start analysing the data.
+
+Daily consumption for each connection is a critical metric in managing water resources and billing customers. The daily consumption of any water connection is defined by the difference between the cumulative counts at midnight. The interpolation function makes it easy to determine daily consumption. This function interpolates the midnight reads for each of the RTUs over the period, starting the previous day. The output of the function is a data frame that can be piped into the plotting function to visualise the data. When you group the data by date, you can also determine the total consumption over a group of services.
+
+#+BEGIN_SRC R
+daily_consumption <- function(rtus, dates) {
+  timestamps <- seq.POSIXt(as.POSIXct(min(dates)) - 24 * 3600, as.POSIXct(max(dates)), by = "day") 
+  interpolate_count(rtus, timestamps) %>%
+    group_by(DevEUI) %>%
+    mutate(Consumption = c(0, diff(Count)) * 5,
+           Date = format(TimeStampAEST, "%F")) %>%
+    filter(TimeStampAEST != timestamps[1]) %>%
+    select(DevEUI, Date, Consumption)
+}
+ 
+daily_consumption(rtu[32:33], c("2020-02-01", "2020-02-7")) %>%
+  ggplot(aes(x = Date, y = Consumption)) + geom_col() + 
+  facet_wrap(~DevEUI) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Analysing digital water meter data: Daily consumption.
+Analysing digital water meter data: Daily consumption.
+#+END_SRC
+*** Diurnal Curves
+The diurnal curve is one of the most important pieces of information used in the design of water supply systems. This curve shows the usage of one or more services for each hour in the day. This curve is a reflection of human behaviour, as we use most water in the morning and the evenings.
+
+This function slices data for a vector of RTUs over a period and then plots the average diurnal curve. The data is obtained by interpolating the cumulative counts for each whole hour in the period. The function then calculates the flow in litres per hour and visualises the minimum, mean and maximum value.
+
+#+BEGIN_SRC R
+plot_diurnal_connections <- function(rtus, dates) {
+  timestamps <- seq.POSIXt(as.POSIXct(dates[1]), as.POSIXct(dates[2]), by = "hour") 
+  interpolate_count(rtus, timestamps) %>% 
+    mutate(Rate = c(0, diff(Count * 5)),
+           Hour = as.integer(format(TimeStampAEST, "%H"))) %>% 
+    filter(Rate >= 0) %>%
+    group_by(Hour) %>%
+    summarise(min = min(Rate), mean = mean(Rate), max = max(Rate)) %>%
+    ggplot(aes(x = Hour, ymin = min, ymax = max)) + 
+      geom_ribbon(fill = "lightblue", alpha = 0.5) + 
+      geom_line(aes(x = Hour, y = mean), col = "orange", size = 1) +
+      ggtitle("Connections Diurnal flow") + ylab("Flow rate [L/h]")
+}
+ 
+plot_diurnal_connections(rtu[12:20], c("2020-02-01", "2020-03-01"))
+#+END_SRC
+
+#+CAPTION: Analysing digital water meter data: Diurnal curve.
+
+Boxplots are also an informative way to visualise this curve. This method provides more statistical information on one page, and the ggplot function performs the statistical analysis.
+
+#+BEGIN_SRC R
+plot_diurnal_box <- function(rtus, dates) {
+  timestamps <- seq.POSIXt(as.POSIXct(dates[1]), as.POSIXct(dates[2]), by = "hour") 
+  interpolate_count(rtus, timestamps) %>% 
+    mutate(Rate = c(0, diff(Count * 5)),
+           Hour = as.integer(format(TimeStampAEST, "%H"))) %>% 
+    filter(Rate >= 0) %>%
+    group_by(Hour) %>%
+    ggplot(aes(x = factor(Hour), y = Rate)) + 
+      geom_boxplot() + 
+      ggtitle("Diurnal flow") + ylab("Flow rate [L/h]") + xlab("Time")
+}
+ 
+plot_diurnal_box(rtu[12:20], c("2020-02-01", "2020-03-01"))
+#+END_SRC 
+
+#+CAPTION: Analysing digital water meter data: Diurnal curve.
+
+**** Further Analysing Digital Water Metering Data
+These are only glimpses into what is possible with this type of data. Further algorithms need to be developed to extract additional value from this data. I am working on developing leak detection algorithms and clustering diurnal curves, daily consumption graphs and so on. Any data science enthusiast who is interested in helping me to develop an Open Source R library to analyse digital metering data.
+** Visualising water consumption spatially
+A geographic bubble chart is a straightforward method to visualise quantitative information with a geospatial relationship. Last year I was in Vietnam helping the Phú Thọ Water Supply Joint Stock Company with their data science. They asked me to create a map of a sample of their water consumption data. In this post, I share this little ditty to explain how to plot a bubble chart over a map using the
+
+In this post, I share this little ditty to explain how to plot a bubble chart over a map using the ggmap package.
+
+The sample data contains a list of just over 100 readings from water meters in the city of Việt Trì in Vietnam, plus their geospatial location. This data uses the World Geodetic System of 1984 (WGS84), which is compatible with Google Maps and similar systems.
+
+#+BEGIN_SRC R
+# Load the data
+water <- read.csv("Data/PhuThoMeterReads.csv")
+water$Consumption <- water$read_new - water$read_old
+head(water)
+summary(water$Consumption)
+#+END_SRC
+
+The consumption at each connection is between 0 and 529 cubic metres, with a mean consumption of 23.45 cubic metres.
+
+With the ggmap extension of the ggplot package, we can visualise any spatial data set on a map. The only condition is that the spatial coordinates are in the WGS84 datum. The ggmap package adds a geographical layer to ggplot by adding a Google Maps or Open Street Map canvas.
+
+The first step is to download the map canvas. To do this, you need to know the centre coordinates and the zoom factor. To determine the perfect zoon factor requires some trial and error. The ggmap package provides for various map types, which are described in detail in the documentation.
+
+#+BEGIN_SRC R
+library(ggmap)
+centre <- c(mean(range(water$lon)), mean(range(water$lat)))
+viettri <- get_map(centre, zoom = 17, maptype = "hybrid")
+g <- ggmap(viettri)
+#+END_SRC
+
+The ggmap package follows the same conventions as ggplot. We first call the map layer and then add any required geom. The point geom creates a nice bubble chart when used in combination with the scale_size_area option. This option scales the points to a maximum size so that they are easily visible. The transparency (alpha) minimises problems with overplotting. This last code snippet plots the map with water consumption.
+
+#+BEGIN_SRC R
+g + geom_point(data = reads, aes(x = lon, y = lat, size = Consumption), 
+        shape = 21, colour = "dodgerblue4", fill = "dodgerblue", alpha = .5) +    
+    scale_size_area(max_size = 20) + 
+    ggtitle("Việt Trì sự tiêu thụ nước")
+#+END_SRC
+
+You can find the code and data for this article on my GitHub repository. With thanks to Ms Quy and Mr Tuyen of Phu Tho water for their permission to use this data.
+
+This map visualises water consumption in the targeted area of Việt Trì. The larger the bubble, the larger the consumption. It is no surprise that two commercial customers used the most water. Ggplot automatically adds the legend for the consumption variable.
+** Water Taste Testing
+** Cholera Analysis
+** Water Quality Data
+Percentile calculations can be more tricky than at first meets the eye. A percentile indicates the value below which a percentage of observations fall. Some percentiles have special names, such as the quartile or the decile, both of which are quantiles. This deceivingly simple definition hides the various ways to determine this number. Unfortunately, there is no standard definition for percentiles, so which method do you use?
+
+The quantile function in R generates sample percentiles corresponding to the given probabilities. By default, the quantile function provides the quartiles and the minimum and maximum values. The code snippet below generates semi-random data, plots the histogram and visualises the third quartile.
+
+#+BEGIN_SRC R
+set.seed(1969)
+test.data <- rnorm(n = 10000, mean = 100, sd = 15)
+library(ggplot2)
+ggplot(as.data.frame(test.data), aes(test.data)) + 
+ geom_histogram(binwidth = 1, aes(y = ..density..), fill = "dodgerblue") + 
+ geom_line(stat = "function", fun = dnorm, args = list(mean = 100, sd = 15), colour = "red", size = 1) + 
+ geom_area(stat = "function", fun = dnorm, args = list(mean = 100, sd = 15), 
+ colour = "red", fill="red", alpha = 0.5, xlim = quantile(test.data, c(0.5, 0.75))) + 
+ theme(text = element_text(size = 16))
+#+END_SRC
+
+The quantile default function and the 95th percentile give the following results:
+
+=quantile(test.data)=
+       0%       25%       50%       75%      100% 
+ 39.91964  89.68041 100.16437 110.01910 153.50195 
+ 
+> quantile(test.data, probs=0.95)
+     95% 
+124.7775 
+*** Methods of percentile calculations
+The quantile function in R provides for nine different ways to calculate percentiles. Each of these options uses a different method to interpolate between observed values. I will not discuss the mathematical nuances between these methods. Hyndman and Fan (1996) provide a detailed overview of these methods.
+
+The differences between the nine available methods only matter in skewed distributions, such as water quality data. For the normal distribution simulated above the outcome for all methods is exactly the same, as illustrated by the following code.
+
+=sapply(1:9, function(m) quantile(test.data, 0.95, type = m))=
+ 
+     95%      95%      95%      95%      95%      95%      95%      95%      95% 
+124.7775 124.7775 124.7775 124.7775 124.7775 124.7775 124.7775 124.7775 124.7775 
+*** Percentile calculations in water quality
+The Australian Drinking Water Quality Guidelines (November 2016) specify that: “based on aesthetic considerations, the turbidity should not exceed 5 NTU at the consumer’s tap”. The Victorian Safe Drinking Water Regulations (2015) relax this requirement and require that:
+
+“The 95th percentile of results for samples in any 12 month period must be less than or equal to 5.0 NTU.”
+
+The Victorian regulators also specify that the percentile should be calculated with the Weibull Method. This requirement raises two questions: What is the Weibull method? How do you implement this requirement in R?
+
+The term Weibull Method is a bit confusing as this is not a name used by statisticians. In Hyndman & Fan (1996), this method has the less poetic name \hat{Q}_8(p). Waloddi Weibull, a Swedish engineer famous for his distribution, was one of the first to describe this method. Only the regulator in Victoria uses that name, which is based on McBride (2005). This theoretical interlude aside, how can we practically apply this to water quality data?
+
+In case you are interested in how the Weibull method works, the weibull.quantile function shown below calculates a quantile p for a vector x using this method. This function gives the same result as =quantile(x, p, type = 6)=.
+
+#+BEGIN_SRC R
+weibull.quantile <- function(x, p) {
+    # Order Samples from large to small
+    x <- x[order(x, decreasing = FALSE)]
+    # Determine ranking of percentile according to Weibull (1939)
+    r <- p * (length(x) + 1)
+    # Linear interpolation
+    rfrac <- (r - floor(r))
+    return((1 - rfrac) * x[floor(r)] + rfrac * x[floor(r) + 1])
+}
+#+END_SRC
+
+Turbidity data is not normally distributed as it is always larger than zero. In this example, the turbidity results for the year 2016 for the water system in Tarnagulla are used to illustrate the percentile calculations. The range of weekly turbidity measurements is between 0.,05 NTU and 0.8 NTU, well below the aesthetic limits.
+
+#+CAPTION: Turbidity at customer tap for each zone in the Tarnagulla system in 2016 $latex (n = 53)$.
+
+When we calculate the percentiles for all nine methods available in the base-R function we see that the so-called Weibull method generally provides the most conservative result.
+
+The graph and the table were created with the following code snippet:
+
+#+BEGIN_SRC R
+ggplot(turbidity, aes(Result)) + 
+ geom_histogram(binwidth=.05, fill="dodgerblue", aes(y=..density..)) + 
+ facet_wrap(~Zone) + 
+ theme(text=element_text(size=16))
+ 
+tapply(turbidity$Result, turbidity$Zone, 
+ function(x) sapply(1:9, function(m) quantile(x, 0.95, type=m)))
+#+END_SRC
+You can view the code on GitHub.
+* Customers
+Literature about water management mostly discusses the technical aspects of the value chain, as discussed in the previous chapters. The water value chain is often described as moving from the catchment to the tap. This statement leaves out the customers, the most important part of the tap water system. Analysing customers requires a very different skill set then the technical data. Information about customers and their perception of water services, is a social science. 
+** Social Science
+The methodology of the social sciences 
+
+This chapter discusses various techniques to analyse data about customers and their views of the service provided by a water utility.
+** Sentiment Analysis
+In developed countries, tap water is safe to drink and available for a low price. Despite the fact that high-quality drinking water is almost freely available, the consumption of bottled water is increasing every year. Bottled water companies use sophisticated marketing strategies, while water utilities are mostly passive providers of public service. When asked why so many people prefer bottled water, Australian marketing expert Russell Howcroft even called water utilities "lazy marketers" in the popular show /The Gruen Transfer/. 
+
+This section explains how data science can help us to better understand how people feel about tap water and the reasons behind the lack of in trust in their water supply. This analysis involves analysing the sentiments of tweets that contain the words "tap water" using the Tidytext package developed by 
+*** Tap Water Sentiment Analysis
+Each tweet that contains the words "tap water" contains a message about the attitude the author has towards that topic. Each text expresses a sentiment about the topic it describes. Sentiment analysis is a data science technique that extracts subjective information from a corpus of text. The basic method compares a string of words with a set of words with calibrated sentiments. These calibrated sets are created by asking many people how they feel about a certain word. For example, the word "stink" expresses a negative sentiment, while the word "nice" would be a negative sentiment.
+
+This tap water sentiment analysis consists of three steps. The first step extracts the mos recent 1,000 tweets that contain the words "tap water" from Twitter. The second step cleans the data, and the third step undertakes the analysis visualises the results.
+*** Extracting tweets using the TwitteR package
+The TwitteR package by Geoff Gentry makes it very easy to retrieve tweets using search criteria. The only prerequisite is that you create an API on Twitter to receive the keys and tokens. In the code below, the actual values have been removed because the API is person-bound. 
+
+The code in this book calls a private file to load the API codes, extracts the tweets and creates a data frame with a tweet id number and its text. You will need to replace the =twittR_API.R= file with your own version by saving the code snippet below and replacing the values with your own.
+
+#+CAPTION: The =twitteR_API.R file structure.
+
+#+BEGIN_SRC R
+api_key <- "The API key"
+api_secret <- "API  Secret"
+token <- "Token"
+token_secret <- "Token Secret"
+#+END_SRC
+
+You will need to get an account on Twitter. If you have an account, then sign-in to =apps.twitter.com=. Click on the button to create a new app and follow the instructions on the screen.
+
+Once you have successfully created an application, click on the "key and access token" tab. From that page you are going to need four things:
+
+1. Consumer Key (API Key)
+2. Consumer Secret (API Secret)
+
+Click the "Create my access token" button to also obtain the:
+
+3. Access Token
+4. Access Token Secret
+
+Copy and paste these four values and add them to the relevant places in the =twitteR_API.R= file. We can now start extracting tweets about tap water.
+
+#+BEGIN_SRC R :session sentiment
+library(tidyverse)
+library(twitteR)
+source("Customers/twitteR_API.R")
+setup_twitter_oauth(api_key, api_secret, token, token_secret)
+
+tapwater_tweets <- searchTwitter("tap water", n = 1000, lang = "en") %>%
+  twListToDF() %>%
+  select(id, text)
+tapwater_tweets <- subset(tapwater_tweets, !duplicated(tapwater_tweets$text))
+tapwater_tweets$text <- gsub("’", "'", tapwater_tweets$text)
+write_csv(tapwater_tweets, paste0("Customers/tapwater_tweets_", format(Sys.time(), "%F_%H%M"), ".csv"))
+#+END_SRC
+
+#+RESULTS:
+
+This code snippet authenticates the Twitter connection and extracts 1,000 tweets that contain the words "tap water". This information is piped to the =twListToDF()= command to convert it to a data frame and only the text of the tweet and its id are maintained.
+
+The next section cleans the data by removing duplicate tweets (retweets) and by replacing the apostrophe with the one that Tidytext will recognise. The last line writes the data to a CSV file so we don't have to query Twitter each time we change the analysis. The file name is concatenated with the data and time. The format command displays any time variable in the desired format. Read the =strptime= help file for detailed information.
+*** Create a tidy text data set
+Text analysis can be a powerful tool to help to analyse large amounts of text. The R language has an extensive range of packages to help you undertake such a task. The Tidytext package extends the Tidy Data logic promoted by Hadley Wickham and his Tidyverse software collection.
+
+The first step in cleaning the data is to create unigrams, which involves splitting the tweets into individual words that can be analysed. We can then visualise the most common words.
+
+#+BEGIN_SRC R :session sentiment
+library(tidytext)
+tapwater_tweets <- read_csv("Customers/tapwater_tweets_2018-04-13_1509.csv")
+tidy_tweets <- tapwater_tweets %>%
+  unnest_tokens(word, text)
+
+data(stop_words)
+tidy_tweets <- tidy_tweets %>%
+  anti_join(stop_words) %>%
+  filter(!word %in% c("tap", "water", "rt", "https", "t.co", "gt", 
+                      "amp", as.character(0:9)))
+
+tidy_tweets %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 5) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) + geom_col(fill = "dodgerblue4") +
+    xlab(NULL) + coord_flip() + ggtitle("Most common words in tap water tweets")
+ggsave("Images/tapwater_words.png", dpi = 300)
+#+END_SRC 
+
+#+RESULTS:
+
+#+CAPTION: Most common words in tap water tweets.
+[[file:Images/tapwater_words.png]]
+
+The most common words related to drinking the water and to bottled water, which makes sense. Also recent issues in Kentucky and Flint feature in this list.
+*** Sentiment Analysis
+The Tidytext package contains three lexicons of thousands of single English words (unigrams) that were manually assessed for their sentiment. The principle of the sentiment analysis is to compare the words in the text with the words in the lexicon and analyse the results. For example, the statement: "This tap water tastes horrible" has a sentiment score of -3 in the AFFIN system by Finn Årup Nielsen due to the word "horrible". In this analysis, I have used the "bing" method published by Liu et al. in 2005.
+
+#+BEGIN_SRC R :session sentiment
+sentiment_bing <- tidy_tweets %>%
+  inner_join(get_sentiments("bing"))
+
+sentiment_bing %>%
+  summarise(Negative = sum(sentiment == "negative"), 
+            positive = sum(sentiment == "positive"))
+
+sentiment_bing %>%
+  group_by(sentiment) %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 2) %>%
+  ggplot(aes(word, n, fill = sentiment)) + geom_col(show.legend = FALSE) + 
+    coord_flip() + facet_wrap(~sentiment, scales = "free_y") + 
+    ggtitle("Contribution to sentiment") + xlab(NULL) + ylab(NULL)
+ggsave("Hydroinformatics/tapwater_sentiment.png", dpi = 300)
+#+END_SRC
+
+#+RESULTS:
+
+This tap water sentiment analysis shows that two-thirds of the words that express a sentiment were negative. The most common negative words were "smells" and "scared". This analysis is not a positive result for water utilities. Unfortunately, most tweets were not spatially located so I couldn't determine the origin of the sentiment.
+
+Sentiment analysis is an interesting explorative technique, but it should not be interpreted as absolute truth. This method is not able to detect sarcasm or irony, and words don't always have the same meaning as described in the dictionary.
+
+The important message for water utilities is that they need to start taking the aesthetic properties of tap water as serious as the health parameters. A lack of trust will drive consumers to bottled water, or less healthy alternatives such as soft drinks are alternative water sources.
+** Service Quality
+** Service recovery
+Each interaction between a customer and their service provider is a moment of truth that can lead to either satisfaction or dissatisfaction. Every time a customer opens a tap, every time a customer interacts with a communication from the service provider, billing or otherwise, is a moment of truth. Most water utilities manage millions such moments of truth every day.
+
+Due to the low level of personal interaction between water utilities and its
+customers, not much information is available about their perception of the service. 
+
+Conducting market research is an expensive process which is only undertaken
+intermittently. This leads water utilities to rely on complaints from customers to obtain intelligence about their perception of service. By relying on complaints, customers are effectively the last measurement instrument in the monitoring system and they act as sentinels to inform the utility of service failures. Unfortunately, complaints are often interpreted in a punitive way and performance indicators point towards minimising the number of complaints.
+
+Receiving a complaint is the best outcome for cases where a customer has a negative experience.
+
+*** Collecting complaints
+
+*** Analysing complaint data
+
+** Managing a Contact Centre
+*** The Erlang-C Model
+
+
+The Erlang C formula expresses the probability that an arriving customer will need to queue instead of being served immediately. Erlang C assumes an infinite population of sources, which jointly offer traffic of $E$ Erlangs to $A$ agents. However, if all the servers are busy when a request arrives from a customer, the request is queued. An unlimited number of requests may be held in the queue in this way simultaneously. This formula calculates the probability of queuing offered traffic, assuming that blocked calls stay in the system until they can be handled.  This formula is used to determine the number of agents or customer service representatives needed to staff a call centre for a specified desired probability of queuing.  However, the Erlang C formula assumes that callers never hang up while in queue, which makes the formula predict that more agents should be used than are really needed to maintain a desired service level.)
+
+\begin{equation}
+\large
+P_w = {{\frac{E^A}{A!} \frac{A}{A - E}} \over \left ( \sum\limits_{i=0}^{A-1} \frac{E^i}{i!} \right ) + \frac{E^A}{A!} \frac{A}{A - E}}
+\end{equation}
+
+where:
+- $E$ is the total traffic offered in units of Erlangs
+- $A$ is the number of agents on the phone
+- $P_w$ is the probability that a customer has to wait for service.
+
+** Data Science Ethics
+Another aspect specific to analysing data about humans are ethical considerations. Collecting, storing and analysing data from customers
+
+These ethical considerations are especially important when analysing 
+
+Collecting data through interviewing and online questionnaires introduces ethical issues to be considered before undertaking the research (Bryman and Bell, 2011; Flick, 2009):
+- Informed consent
+- Avoiding harm in collecting data
+- Doing justice to participants in analysing data
+*** Informed consent
+Informed consent is not always practical.
+*** Algorithmic fairness
+*** Data Science Code of Practice
+
+- Don't be creepy
+-
+**** Don't be creepy
+This first principle implies that data scientists should not extract data from individual customers and analyse them unless there is a compelling reason. The principle of informed consent is often not fulfilled in electronic data capture
+
+For example, data from smart meters is collected without informed consent because these programs rely on every customer in the network being part of the system. The highly privacy sensitive nature of this data means that ethical guidelines need to be adhered to. Most of the value from these data sets 
+* Business
+** Water System Index
+** Nett Present Value calculations
+** Monte Carlo Simulations
+** Dashboards
+* In Closing
+This book only provides a staring point for implementing a systematic approach to analysing data for water utilities. 
+
+
+#+BEGIN_SRC emacs-lisp
+(setq display-time-world-list '(("Amsterdam" "Maastricht")
+                                ("Australia/Melbourne" "Melbourne")))
+
+#+END_SRC
