@@ -4,17 +4,17 @@
 library(tidyverse)
 library(RColorBrewer)
 
-if (!file.exists("Catchment/PrettyBoy.csv")) {
+if (!file.exists("PrettyBoy.csv")) {
   pb_data <- readLines("http://www.mgs.md.gov/ReservoirDataPoints/PrettyBoy1998.dat") %>%
     strsplit(",")
   prettyboy <- do.call(rbind, pb_data[-1:-2]) %>%
-    as_data_frame()
+    as_tibble()
   names(prettyboy) <- pb_data[[1]] %>%
     strsplit(",") %>%
     gsub("[[:punct:]]", "", .)
-  write_csv("Catchment/PrettyBoy.csv")
+  write_csv("PrettyBoy.csv")
 } else {
-  prettyboy <- read_csv("Catchment/PrettyBoy.csv")
+  prettyboy <- read_csv("PrettyBoy.csv")
 }
 
 ext <- c(which(prettyboy$Easting == min(prettyboy$Easting)), 
