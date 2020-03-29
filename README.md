@@ -1,8 +1,9 @@
 Hydroinformatics: Data Science for Water Utilities
 
-* Historian.png: SCADA historian simulation
-* Turbidity.png: SCADA data simulation
-* VirtualTags.png: Virtual tags Simulation
-* percentiles.R: methods for calculating percentiles
-* scada_spikes.R: Spike detection
-* virtual_tags.R: Virtaul tags demonstration
+* `Catchment`: Analysing catchment data.
+* `Customers`: The Voice of the customer.
+* `CADA`: Analysing time series.
+* `WaterFlow`: Water quantity.
+* `WaterQuality`: Water quality.
+
+![Hydroinformatics: Data Science for Water Utilities](Cover/datasciencebook.jpg "Hydroinformatics")
