@@ -7,7 +7,7 @@ library(tidytext)
 library(twitteR)
 
 # Extract tap water tweets
-source("twitteR_API.R")
+source("../twitteR_API.R")
 setup_twitter_oauth(api_key, api_secret, token, token_secret)
 
 tapwater_tweets <- searchTwitter("tap water", n = 1000, lang = "en") %>%
