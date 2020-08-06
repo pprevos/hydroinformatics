@@ -27,7 +27,7 @@ performance <- tibble(Town = towns) %>%
            Performance = round((Treatment + Network + Regulation + Perception) / 4))
 
 ## Get map
-bbox <- make_bbox(range(performance$lon), range(performance$lat))
+bbox <- make_bbox(range(performance$lon), range(performance$lat), f = .1)
 map <- get_stamenmap(bbox, maptype = "toner-hybrid")
 
 ## Single variable
@@ -44,6 +44,7 @@ ggsave("../../static/images/hydroinformatics/bubble-chart-performance.png", widt
 
 ## Cheesecake diagram
 library(ggforce)
+library(gridExtra)
 
 ## Convert data
 cheesecake = pivot_longer(performance, -1:-4, names_to = "Aspect", values_to = "Performance") %>%
@@ -51,8 +52,20 @@ cheesecake = pivot_longer(performance, -1:-4, names_to = "Aspect", values_to = "
     mutate(start = rep(seq(0, 2 * pi, length.out = 5)[-5], t),
            end = rep(seq(0, 2 * pi, length.out = 5)[-1], t))
 
+## Legend
+cheesecake_legend <- tibble(x0 = c(.1, .1, -.1, -.1),
+                            y0 = c(.1, -.1, -.1, .1),
+                            start = seq(0, 2 * pi, length.out = 5)[-5],
+                            end = seq(0, 2 * pi, length.out = 5)[-1],
+                            dimension = unique(cheesecake$Aspect))
+l <- ggplot(cheesecake_legend, aes(x0 = x0, y0 = y0, r0 = 0, r = 1, start = start, end = end)) +
+    geom_arc_bar(col = NA, fill = "lightgrey") +
+    geom_text(aes(x0 * 6, y0 * 6, label = unique(cheesecake$Aspect)), size = 2) + 
+    theme_void() +
+    coord_equal()
+
 ## Visualise
-ggmap(map, extent = "device",
+m <- ggmap(map, extent = "device",
       base_layer = ggplot(data = cheesecake,
                           aes(x0 = lon,
                               y0 = lat,
@@ -65,6 +78,11 @@ ggmap(map, extent = "device",
     scale_size_area(max_size = 12, guide = FALSE) +
     scale_fill_gradientn(colors = brewer.pal(7, "RdYlBu")) +
     labs(title = "System Performance",
-         subtitle = "Simulated data") 
-theme_void(base_size = 8)
-ggsave("../../static/images/hydroinformatics/cheesecake-performance.png", width = 4, height = 4)
+         subtitle = "Simulated data")  +
+    theme_void(base_size = 4)
+
+m + coord_cartesian() + coord_equal() +
+    annotation_custom(grob = ggplotGrob(l),
+                      xmin = bbox[3] - .3, xmax = bbox[3],
+                      ymin = bbox[4] - .3, ymax = bbox[4])
+ggsave("../../static/images/hydroinformatics/cheesecake-performance.png", width = 4, height = 6)
