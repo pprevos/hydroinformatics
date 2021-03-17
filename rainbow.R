@@ -22,7 +22,7 @@ cases_dial <- cases %>%
 # Visualise
 ggplot(cases_dial) + 
   geom_arc_bar(aes(x0 = 0, y0 = 0, r0 = .5, r = 1, start = ymin, end = ymax, fill = Topic), col = NA) + 
-  scale_fill_manual(name = NULL, values = palet) + 
+  #scale_fill_manual(name = NULL, values = palet) + 
   geom_text(aes(x = .75 * sin((ymax + ymin) / 2), 
                 y = .75 * cos((ymax + ymin) / 2), 
                 angle = text_angle,
